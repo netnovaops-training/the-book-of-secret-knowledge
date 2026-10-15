@@ -1,0 +1,20 @@
+# Keeps this fork up to date with the original repository (trimstray/the-book-of-secret-knowledge).
+# Runs every Monday, and whenever I press "Run workflow". No secrets needed.
+name: Sync fork from upstream
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # Mondays 06:00 UTC
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Pull the latest from the original repo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X POST \
+            repos/${{ github.repository }}/merge-upstream \
+            -f branch=master
